@@ -95,7 +95,7 @@ jobs:
           echo "=== SDD Phase 7: ARCHIVE ==="
           ./ayrton sdd archive --issue $ISSUE_NUMBER || true
           
-          git push origin "$BRANCH"
+          git push --force-with-lease origin "$BRANCH"
           echo "branch=$BRANCH" >> $GITHUB_OUTPUT
 
       - name: Create Pull Request
