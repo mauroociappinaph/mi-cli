@@ -38,6 +38,9 @@ jobs:
           go-version: '1.23'
           cache: true
 
+      - name: Download Go dependencies
+        run: go mod tidy
+
       - name: Build ayrton CLI
         run: go build -o ayrton .
 
