@@ -1,0 +1,33 @@
+# Binarios
+mi-cli
+mi-cli.exe
+dist/
+
+# Coverage
+coverage.out
+coverage.html
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Config local (no commitear secrets)
+*.local.yaml
+.env
+.env.local
+
+# GoReleaser
+.goreleaser.yml.local
+
+# Logs
+*.log
+
+# Testing
+*.test
+*.prof
