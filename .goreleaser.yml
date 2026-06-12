@@ -36,10 +36,14 @@ archives:
   - id: default
     builds:
       - ayrton
-    format: tar.gz
+    formats:
+      - tar.gz
+      - binary
     format_overrides:
       - goos: windows
-        format: zip
+        formats:
+          - zip
+          - binary
     name_template: >-
       {{ .ProjectName }}_
       {{- title .Os }}_
