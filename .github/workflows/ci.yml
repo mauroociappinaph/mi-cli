@@ -36,12 +36,17 @@ jobs:
         run: go vet ./...
 
       - name: Run tests
-        run: go test -v -race -coverprofile=coverage.out ./...
+        run: |
+          # Use absolute path for coverprofile to avoid Windows path parsing issues
+          COVERAGE_FILE="${{ runner.temp }}/coverage.out"
+          go test -v -race -coverprofile="$COVERAGE_FILE" ./...
+          echo "COVERAGE_FILE=$COVERAGE_FILE" >> $GITHUB_ENV
+        shell: bash
 
       - name: Upload coverage
         uses: codecov/codecov-action@v4
         with:
-          files: ./coverage.out
+          files: ${{ env.COVERAGE_FILE }}
           flags: unittests
           fail_ci_if_error: false
 
