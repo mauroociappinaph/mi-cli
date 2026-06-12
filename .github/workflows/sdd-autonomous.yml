@@ -51,7 +51,11 @@ jobs:
           
           ISSUE_DATA=$(gh api repos/${{ github.repository }}/issues/$ISSUE_NUM)
           echo "issue_title=$(echo "$ISSUE_DATA" | jq -r .title)" >> $GITHUB_OUTPUT
-          echo "issue_body=$(echo "$ISSUE_DATA" | jq -r .body)" >> $GITHUB_OUTPUT
+          # Write body to file to avoid escaping issues
+          echo "$ISSUE_DATA" | jq -r .body > /tmp/issue_body.txt
+          echo "issue_body<<EOF" >> $GITHUB_OUTPUT
+          cat /tmp/issue_body.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Run SDD Autonomous Loop
         id: sdd
