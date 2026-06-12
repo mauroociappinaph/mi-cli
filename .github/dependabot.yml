@@ -12,9 +12,9 @@ updates:
     labels:
       - "dependencies"
       - "go"
-    commit-message:
-      prefix: "chore(deps)"
-      include: "scope"
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
     groups:
       go-modules:
         patterns:
@@ -27,6 +27,9 @@ updates:
           - "*"
         update-types:
           - "major"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -38,5 +41,8 @@ updates:
     labels:
       - "dependencies"
       - "github-actions"
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
     commit-message:
       prefix: "chore(ci)"
