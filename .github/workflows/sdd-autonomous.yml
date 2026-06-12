@@ -98,7 +98,7 @@ jobs:
           git push --force-with-lease origin "$BRANCH"
           echo "branch=$BRANCH" >> $GITHUB_OUTPUT
 
-      - name: Create Pull Request
+      - name: Create Pull Request (optional)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -127,13 +127,14 @@ jobs:
           Closes #${{ steps.issue.outputs.issue_number }}
           PRBODYEOF
           
+          # Try to create PR, but don't fail if no permission
           gh pr create \
             --repo ${{ github.repository }} \
             --base main \
             --head ${{ steps.sdd.outputs.branch }} \
             --title "SDD: ${{ steps.issue.outputs.issue_title }} (#${{ steps.issue.outputs.issue_number }})" \
             --body-file /tmp/pr_body.md \
-            --label autonomous,sdd-generated
+            --label autonomous,sdd-generated || echo "::warning::Could not create PR (permission issue). Branch pushed: ${{ steps.sdd.outputs.branch }}"
 
       - name: Comment on issue
         if: success()
