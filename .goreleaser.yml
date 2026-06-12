@@ -1,4 +1,4 @@
-# .goreleaser.yml - Configuración de GoReleaser para releases automáticos v2
+# .goreleaser.yml - Configuración GoReleaser v2
 # Documentación: https://goreleaser.com/customization/
 
 version: 2
@@ -50,7 +50,6 @@ archives:
     files:
       - README.md
       - LICENSE
-      - CHANGELOG.md
 
 checksum:
   name_template: 'checksums.txt'
@@ -76,70 +75,52 @@ release:
   header: "# Changelog\n"
   footer: "\n---\nReleased by [GoReleaser](https://goreleaser.com)"
 
-brews:
-  - repository:
-      owner: mauroociappinaph
-      name: homebrew-tap
-    commit_author:
-      name: goreleaserbot
-      email: goreleaser@carlosbecker.com
-    folder: Formula
-    homepage: "https://github.com/mauroociappinaph/mi-cli"
-    description: "Un CLI moderno y rápido construido con Go + Cobra"
-    license: "MIT"
-    dependencies: []
-    test: |
-      system "#{bin}/mi-cli version"
+# Distribuciones opcionales (descomenta cuando tengas los repos listos)
+# brews:
+#   - repository:
+#       owner: mauroociappinaph
+#       name: homebrew-tap
+#     folder: Formula
+#     homepage: "https://github.com/mauroociappinaph/mi-cli"
+#     description: "Un CLI moderno y rápido construido con Go + Cobra"
+#     license: "MIT"
 
-scoops:
-  - repository:
-      owner: mauroociappinaph
-      name: scoop-bucket
-    commit_author:
-      name: goreleaserbot
-      email: goreleaser@carlosbecker.com
-    homepage: "https://github.com/mauroociappinaph/mi-cli"
-    description: "Un CLI moderno y rápido construido con Go + Cobra"
-    license: "MIT"
+# scoops:
+#   - repository:
+#       owner: mauroociappinaph
+#       name: scoop-bucket
+#     homepage: "https://github.com/mauroociappinaph/mi-cli"
+#     description: "Un CLI moderno y rápido construido con Go + Cobra"
+#     license: "MIT"
 
-winget:
-  - repository:
-      owner: mauroociappinaph
-      name: winget-pkgs
-    commit_author:
-      name: goreleaserbot
-      email: goreleaser@carlosbecker.com
-    copyright: "Copyright (c) 2024 Tu Nombre"
-    description: "Un CLI moderno y rápido construido con Go + Cobra"
-    license: "MIT"
-    moniker: mi-cli
+# winget:
+#   - repository:
+#       owner: mauroociappinaph
+#       name: winget-pkgs
+#     copyright: "Copyright (c) 2024 Tu Nombre"
+#     description: "Un CLI moderno y rápido construido con Go + Cobra"
+#     license: "MIT"
 
-dockers:
-  - image_templates:
-      - "ghcr.io/mauroociappinaph/mi-cli:{{ .Tag }}"
-      - "ghcr.io/mauroociappinaph/mi-cli:latest"
-    build_flag_templates:
-      - "--platform=linux/amd64,linux/arm64"
-    dockerfile: Dockerfile
-    goos: linux
-    goarch:
-      - amd64
-      - arm64
+# dockers:
+#   - image_templates:
+#       - "ghcr.io/mauroociappinaph/mi-cli:{{ .Tag }}"
+#       - "ghcr.io/mauroociappinaph/mi-cli:latest"
+#     build_flag_templates:
+#       - "--platform=linux/amd64,linux/arm64"
+#     goos: linux
+#     goarch:
+#       - amd64
+#       - arm64
 
-nfpms:
-  - id: deb
-    package_name: mi-cli
-    maintainer: "Tu Nombre <tu@email.com>"
-    description: "Un CLI moderno y rápido construido con Go + Cobra"
-    license: "MIT"
-    vendor: "mauroociappinaph"
-    homepage: "https://github.com/mauroociappinaph/mi-cli"
-    formats:
-      - deb
-      - rpm
-      - apk
-    bindir: /usr/bin
-    overrides:
-      deb:
-        compression: zstd
-        compression_level: 3
+# nfpms:
+#   - package_name: mi-cli
+#     maintainer: "Tu Nombre <tu@email.com>"
+#     description: "Un CLI moderno y rápido construido con Go + Cobra"
+#     license: "MIT"
+#     vendor: "mauroociappinaph"
+#     homepage: "https://github.com/mauroociappinaph/mi-cli"
+#     formats:
+#       - deb
+#       - rpm
+#       - apk
+#     bindir: /usr/bin
