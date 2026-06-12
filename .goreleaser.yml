@@ -9,9 +9,9 @@ before:
     - go generate ./...
 
 builds:
-  - id: mi-cli
+  - id: ayrton
     main: .
-    binary: mi-cli
+    binary: ayrton
     env:
       - CGO_ENABLED=0
     goos:
@@ -35,7 +35,7 @@ builds:
 archives:
   - id: default
     builds:
-      - mi-cli
+      - ayrton
     format: tar.gz
     format_overrides:
       - goos: windows
@@ -71,7 +71,7 @@ changelog:
 release:
   github:
     owner: mauroociappinaph
-    name: mi-cli
+    name: ayrton
   header: "# Changelog\n"
   footer: "\n---\nReleased by [GoReleaser](https://goreleaser.com)"
 

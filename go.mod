@@ -1,4 +1,4 @@
-module github.com/tuusuario/mi-cli
+module github.com/tuusuario/ayrton
 
 go 1.23.0
 

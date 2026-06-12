@@ -5,7 +5,7 @@
 .PHONY: help build test lint fmt vet tidy install clean release snapshot
 
 # Variables
-BINARY_NAME := mi-cli
+BINARY_NAME := ayrton
 VERSION := $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
 COMMIT := $(shell git rev-parse --short HEAD 2>/dev/null || echo "none")
 DATE := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")

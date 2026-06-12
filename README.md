@@ -1,11 +1,11 @@
-# mi-cli
+# ayrton
 
 [![Go Version](https://img.shields.io/badge/Go-1.23+-00ADD8?logo=go)](https://go.dev/)
-[![Release](https://img.shields.io/github/v/release/tuusuario/mi-cli?include_prereleases)](https://github.com/tuusuario/mi-cli/releases)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/tuusuario/mi-cli/ci.yml?branch=main)](https://github.com/tuusuario/mi-cli/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/tuusuario/mi-cli)](https://goreportcard.com/report/github.com/tuusuario/mi-cli)
-[![License](https://img.shields.io/github/license/tuusuario/mi-cli)](LICENSE)
-[![GoDoc](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/github.com/tuusuario/mi-cli)
+[![Release](https://img.shields.io/github/v/release/tuusuario/ayrton?include_prereleases)](https://github.com/tuusuario/ayrton/releases)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/tuusuario/ayrton/ci.yml?branch=main)](https://github.com/tuusuario/ayrton/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/tuusuario/ayrton)](https://goreportcard.com/report/github.com/tuusuario/ayrton)
+[![License](https://img.shields.io/github/license/tuusuario/ayrton)](LICENSE)
+[![GoDoc](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/github.com/tuusuario/ayrton)
 
 > Un CLI moderno y rápido construido con **Go + Cobra + Viper** — binario único, multiplataforma, listo para producción.
 
@@ -15,7 +15,7 @@
 
 - ⚡ **Startup instantáneo** (~2-5ms) — sin runtime, binario estático
 - 🌍 **Multiplataforma** — Linux, macOS, Windows (amd64/arm64)
-- ⚙️ **Configuración flexible** — flags, env vars (`MI_CLI_*`), archivo YAML
+- ⚙️ **Configuración flexible** — flags, env vars (`AYRTON_*`), archivo YAML
 - 📦 **Distribución simple** — un solo binario, Homebrew, Scoop, Winget, APT, RPM, Docker
 - 🔄 **Releases automáticos** — GoReleaser + GitHub Actions (tags → artifacts + changelog)
 - 🧪 **CI completo** — test (race detector), lint (golangci-lint), build multi-OS
@@ -29,40 +29,40 @@
 
 ```bash
 # Linux/macOS
-curl -fsSL https://github.com/tuusuario/mi-cli/releases/latest/download/mi-cli_Linux_x86_64.tar.gz | tar xz
-sudo mv mi-cli /usr/local/bin/
+curl -fsSL https://github.com/tuusuario/ayrton/releases/latest/download/ayrton_Linux_x86_64.tar.gz | tar xz
+sudo mv ayrton /usr/local/bin/
 
 # macOS (Apple Silicon)
-curl -fsSL https://github.com/tuusuario/mi-cli/releases/latest/download/mi-cli_Darwin_arm64.tar.gz | tar xz
-sudo mv mi-cli /usr/local/bin/
+curl -fsSL https://github.com/tuusuario/ayrton/releases/latest/download/ayrton_Darwin_arm64.tar.gz | tar xz
+sudo mv ayrton /usr/local/bin/
 
 # Windows (PowerShell)
-irm https://github.com/tuusuario/mi-cli/releases/latest/download/mi-cli_Windows_x86_64.zip | tar xz
-# mover mi-cli.exe a tu PATH
+irm https://github.com/tuusuario/ayrton/releases/latest/download/ayrton_Windows_x86_64.zip | tar xz
+# mover ayrton.exe a tu PATH
 ```
 
 ### Gestores de paquetes
 
 ```bash
 # Homebrew (macOS/Linux)
-brew tap tuusuario/tap && brew install mi-cli
+brew tap tuusuario/tap && brew install ayrton
 
 # Scoop (Windows)
 scoop bucket add tuusuario https://github.com/tuusuario/scoop-bucket
-scoop install mi-cli
+scoop install ayrton
 
 # Winget (Windows)
-winget install tuusuario.mi-cli
+winget install tuusuario.ayrton
 
 # Docker
-docker run --rm ghcr.io/tuusuario/mi-cli:latest version
+docker run --rm ghcr.io/tuusuario/ayrton:latest version
 ```
 
 ### Desde fuente
 
 ```bash
-git clone https://github.com/tuusuario/mi-cli
-cd mi-cli
+git clone https://github.com/tuusuario/ayrton
+cd ayrton
 make install
 ```
 
@@ -71,7 +71,7 @@ make install
 ## 📖 Uso
 
 ```bash
-mi-cli [command] [flags]
+ayrton [command] [flags]
 
 Commands:
   greet [name]    Saluda a alguien
@@ -79,7 +79,7 @@ Commands:
   help            Ayuda sobre cualquier comando
 
 Flags:
-  -c, --config string   Archivo de configuración (default: $HOME/.mi-cli.yaml)
+  -c, --config string   Archivo de configuración (default: $HOME/.ayrton.yaml)
   -h, --help            Ayuda
   -v, --verbose         Salida verbosa
   -o, --output string   Formato de salida (text|json) (default "text")
@@ -89,24 +89,24 @@ Flags:
 
 ```bash
 # Saludo simple
-mi-cli greet
+ayrton greet
 # ¡Hola, mundo! 👋
 
 # Saludo personalizado
-mi-cli greet Mauro
+ayrton greet Mauro
 # ¡Hola, Mauro! 👋
 
 # Output JSON para scripting
-mi-cli greet --output json
+ayrton greet --output json
 # {"greeting": "¡Hola, mundo! 👋"}
 
 # Configuración via environment variable
-MI_CLI_VERBOSE=true mi-cli greet
-# Usando config: /home/user/.mi-cli.yaml
+AYRTON_VERBOSE=true ayrton greet
+# Usando config: /home/user/.ayrton.yaml
 # ¡Hola, mundo! 👋
 ```
 
-### Archivo de configuración (`~/.mi-cli.yaml`)
+### Archivo de configuración (`~/.ayrton.yaml`)
 
 ```yaml
 verbose: true
@@ -238,5 +238,5 @@ MIT License — ver [LICENSE](LICENSE) para detalles.
 ---
 
 <div align="center">
-  <sub>Hecho con ❤️ en Go • <a href="https://github.com/tuusuario/mi-cli/issues">Reportar bug</a> • <a href="https://github.com/tuusuario/mi-cli/issues">Pedir feature</a></sub>
+  <sub>Hecho con ❤️ en Go • <a href="https://github.com/tuusuario/ayrton/issues">Reportar bug</a> • <a href="https://github.com/tuusuario/ayrton/issues">Pedir feature</a></sub>
 </div>

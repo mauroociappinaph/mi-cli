@@ -17,9 +17,9 @@ var (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "mi-cli",
+	Use:   "ayrton",
 	Short: "Un CLI moderno y rápido construido con Go + Cobra",
-	Long: `mi-cli es una herramienta de línea de comandos de ejemplo
+	Long: `ayrton es una herramienta de línea de comandos de ejemplo
 que demuestra las mejores prácticas para CLIs open source en Go.
 
 Características:
@@ -41,7 +41,7 @@ func Execute() error {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "archivo de configuración (default: $HOME/.mi-cli.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "archivo de configuración (default: $HOME/.ayrton.yaml)")
 	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "salida verbosa")
 	rootCmd.PersistentFlags().StringP("output", "o", "text", "formato de salida (text|json)")
 
@@ -63,10 +63,10 @@ func initConfig() error {
 		viper.AddConfigPath(".")
 		viper.AddConfigPath(home)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".mi-cli")
+		viper.SetConfigName(".ayrton")
 	}
 
-	viper.SetEnvPrefix("MI_CLI")
+	viper.SetEnvPrefix("AYRTON")
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err == nil {
@@ -81,7 +81,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Muestra la versión del CLI",
 	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Printf("%s version %s\n", rootCmd.Use, version)
+		cmd.Printf("ayrton version %s\n", version)
 		cmd.Printf("  commit: %s\n", commit)
 		cmd.Printf("  built:  %s\n", date)
 	},

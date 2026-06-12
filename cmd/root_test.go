@@ -33,7 +33,7 @@ func TestRootCmd_Help(t *testing.T) {
 	require.NoError(t, err)
 
 	output := buf.String()
-	assert.Contains(t, output, "mi-cli")
+	assert.Contains(t, output, "ayrton")
 	assert.Contains(t, output, "greet")
 	assert.Contains(t, output, "version")
 }

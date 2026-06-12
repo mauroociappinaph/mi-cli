@@ -88,16 +88,16 @@ jobs:
 
       - name: Build
         run: |
-          go build -ldflags="-s -w -X main.version=dev -X main.commit=${{ github.sha }} -X main.date=$(date -u +%Y-%m-%dT%H:%M:%SZ)" -o mi-cli .
+          go build -ldflags="-s -w -X main.version=dev -X main.commit=${{ github.sha }} -X main.date=$(date -u +%Y-%m-%dT%H:%M:%SZ)" -o ayrton .
 
       - name: Test binary
-        run: ./mi-cli version
+        run: ./ayrton version
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mi-cli-${{ runner.os }}
-          path: mi-cli*
+          name: ayrton-${{ runner.os }}
+          path: ayrton*
 
   goreleaser:
     name: Release
