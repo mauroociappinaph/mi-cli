@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/tuusuario/ayrton/internal/learning"
+	"github.com/mauroociappinaph/ayrton/internal/learning"
 )
 
 var learningCmd = &cobra.Command{

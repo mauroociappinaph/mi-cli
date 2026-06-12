@@ -37,6 +37,14 @@ type SearchResult struct {
 	Rank float64 `json:"rank"`
 }
 
+// SearchOptions options for search
+type SearchOptions struct {
+	Type    string
+	Project string
+	Scope   string
+	Limit   int
+}
+
 // NewClient creates a new Engram client
 func NewClient() (*Client, error) {
 	home, err := os.UserHomeDir()
@@ -188,18 +196,46 @@ func (c *Client) Get(ctx context.Context, id int64) (*Observation, error) {
 
 // Search performs full-text search using FTS5
 func (c *Client) Search(ctx context.Context, query string, limit int) ([]SearchResult, error) {
+	return c.SearchWithOptions(ctx, query, SearchOptions{Limit: limit})
+}
+
+// SearchWithOptions performs full-text search with options
+func (c *Client) SearchWithOptions(ctx context.Context, query string, opts SearchOptions) ([]SearchResult, error) {
 	// Sanitize query for FTS5 - escape special characters
 	query = sanitizeFTS5Query(query)
 
-	rows, err := c.db.QueryContext(ctx, `
+	limit := opts.Limit
+	if limit <= 0 {
+		limit = 20
+	}
+
+	whereClause := "WHERE observations_fts MATCH ?"
+	args := []interface{}{query}
+
+	if opts.Type != "" {
+		whereClause += " AND o.type = ?"
+		args = append(args, opts.Type)
+	}
+	if opts.Project != "" {
+		whereClause += " AND o.project = ?"
+		args = append(args, opts.Project)
+	}
+	if opts.Scope != "" {
+		whereClause += " AND o.scope = ?"
+		args = append(args, opts.Scope)
+	}
+
+	args = append(args, limit)
+
+	rows, err := c.db.QueryContext(ctx, fmt.Sprintf(`
 		SELECT o.id, o.title, o.type, o.scope, o.topic_key, o.content, o.created_at, o.updated_at,
 		       bm25(observations_fts) as rank
 		FROM observations_fts
 		JOIN observations o ON o.id = observations_fts.rowid
-		WHERE observations_fts MATCH ?
+		%s
 		ORDER BY rank
 		LIMIT ?
-	`, query, limit)
+	`, whereClause), args...)
 	if err != nil {
 		return nil, err
 	}
@@ -292,4 +328,84 @@ func sanitizeFTS5Query(query string) string {
 func (o *Observation) ToJSON() (string, error) {
 	b, err := json.MarshalIndent(o, "", "  ")
 	return string(b), err
+}
+
+// SaveLesson guarda una lección aprendida
+func (c *Client) SaveLesson(trigger, action, outcome string, ctx map[string]interface{}, agents []string, confidence float64) (int64, error) {
+	content := fmt.Sprintf(`**Trigger:** %s
+**Action:** %s
+**Outcome:** %s
+**Context:** %v
+**Agents:** %v
+**Confidence:** %.2f
+**Timestamp:** %s`, trigger, action, outcome, ctx, agents, confidence, time.Now().Format(time.RFC3339))
+
+	return c.SaveOrUpdate(context.Background(), &Observation{
+		Title:    fmt.Sprintf("Lesson: %s → %s", trigger, outcome),
+		Type:     "learning",
+		Scope:    "project",
+		TopicKey: "patterns/" + slug(trigger),
+		Content:  content,
+	})
+}
+
+// SavePattern guarda/actualiza un patrón
+func (c *Client) SavePattern(trigger string, pattern *Pattern) error {
+	_, err := c.SaveOrUpdate(context.Background(), &Observation{
+		Title:    fmt.Sprintf("Pattern: %s", trigger),
+		Type:     "pattern",
+		Scope:    "project",
+		TopicKey: "patterns/" + slug(trigger),
+		Content:  pattern.ToMarkdown(),
+	})
+	return err
+}
+
+// GetPatterns busca patrones
+func (c *Client) GetPatterns(trigger string, limit int) ([]SearchResult, error) {
+	return c.SearchWithOptions(context.Background(), trigger, SearchOptions{
+		Type:    "pattern",
+		Project: "project",
+		Scope:   "project",
+		Limit:   limit,
+	})
+}
+
+// GetLessons busca lecciones
+func (c *Client) GetLessons(query string, limit int) ([]SearchResult, error) {
+	return c.SearchWithOptions(context.Background(), query, SearchOptions{
+		Type:    "learning",
+		Project: "project",
+		Scope:   "project",
+		Limit:   limit,
+	})
+}
+
+func slug(s string) string {
+	// Simple slugify
+	return fmt.Sprintf("%x", len(s))
+}
+
+// Pattern estructura para patrones aprendidos
+type Pattern struct {
+	ID          string
+	Trigger     string
+	Action      string
+	Outcome     string
+	Frequency   int
+	Confidence  float64
+	LastSeen    time.Time
+	Agents      []string
+	ContextKeys []string
+}
+
+func (p *Pattern) ToMarkdown() string {
+	return fmt.Sprintf(`**Trigger:** %s
+**Action:** %s
+**Outcome:** %s
+**Frequency:** %d
+**Confidence:** %.2f
+**Last Seen:** %s
+**Agents:** %v
+**Context Keys:** %v`, p.Trigger, p.Action, p.Outcome, p.Frequency, p.Confidence, p.LastSeen.Format(time.RFC3339), p.Agents, p.ContextKeys)
 }
