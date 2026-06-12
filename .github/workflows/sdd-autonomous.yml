@@ -37,8 +37,9 @@ jobs:
       - name: Setup Node.js (for opencode)
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'npm'
+          cache-dependency-path: package-lock.json
 
       - name: Install opencode
         run: npm install -g @opencode/opencode@latest

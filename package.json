@@ -1,0 +1,10 @@
+{
+  "name": "ayrton",
+  "version": "0.2.0",
+  "description": "Ayrton CLI - Startup in a CLI",
+  "private": true,
+  "scripts": {
+    "test": "echo \"No JS tests\""
+  },
+  "devDependencies": {}
+}
