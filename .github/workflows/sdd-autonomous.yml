@@ -101,6 +101,24 @@ jobs:
           git push --force-with-lease origin "$BRANCH"
           echo "branch=$BRANCH" >> $GITHUB_OUTPUT
 
+      - name: Generate Documentation
+        if: success()
+        run: |
+          chmod +x scripts/generate-docs.sh
+          ./scripts/generate-docs.sh
+          git add README.md CHANGELOG.md API.md 2>/dev/null || true
+          git commit -m "docs: auto-generated documentation for issue #${{ steps.issue.outputs.issue_number }}" || echo "No doc changes"
+          git push origin "${{ steps.sdd.outputs.branch }}"
+
+      - name: Sync to Notion
+        if: success() && env.NOTION_TOKEN != '' && env.NOTION_DATABASE_ID != ''
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: |
+          chmod +x scripts/sync-notion.sh
+          ./scripts/sync-notion.sh
+
       - name: Create Pull Request (optional)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -121,6 +139,9 @@ jobs:
           - ⚠️ Apply: Requires AI agent (see task list)
           - ✅ Verify: Tests passing
           - ⚠️ Archive: Placeholder
+          
+          **Documentation**: Auto-generated (README, CHANGELOG, API.md)
+          **Notion**: Synced (if configured)
           
           **Next Steps**:
           - Review generated artifacts in `.atl/`
@@ -149,10 +170,13 @@ jobs:
           Implementation PR created: ${{ steps.sdd.outputs.branch }}
           
           **Generated artifacts**:
-          - Proposal: `.atl/proposals/${{ steps.issue.outputs.issue_number }}.md`
-          - Spec: `.atl/specs/${{ steps.issue.outputs.issue_number }}.md`
-          - Design: `.atl/designs/${{ steps.issue.outputs.issue_number }}.md`
-          - Tasks: `.atl/tasks/${{ steps.issue.outputs.issue_number }}.md`
+          - Proposal: \`.atl/proposals/${{ steps.issue.outputs.issue_number }}.md\`
+          - Spec: \`.atl/specs/${{ steps.issue.outputs.issue_number }}.md\`
+          - Design: \`.atl/designs/${{ steps.issue.outputs.issue_number }}.md\`
+          - Tasks: \`.atl/tasks/${{ steps.issue.outputs.issue_number }}.md\`
+          
+          **Documentation**: README.md, CHANGELOG.md, API.md auto-generated
+          **Notion**: Synced (if configured)
           
           **Next**: Implement tasks from the task list, then re-run workflow for apply/archive phases.
           
