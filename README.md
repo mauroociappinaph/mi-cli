@@ -1,242 +1,64 @@
-# ayrton
+# Ayrton CLI
 
-[![Go Version](https://img.shields.io/badge/Go-1.23+-00ADD8?logo=go)](https://go.dev/)
-[![Release](https://img.shields.io/github/v/release/tuusuario/ayrton?include_prereleases)](https://github.com/tuusuario/ayrton/releases)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/tuusuario/ayrton/ci.yml?branch=main)](https://github.com/tuusuario/ayrton/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/tuusuario/ayrton)](https://goreportcard.com/report/github.com/tuusuario/ayrton)
-[![License](https://img.shields.io/github/license/tuusuario/ayrton)](LICENSE)
-[![GoDoc](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/github.com/tuusuario/ayrton)
+> **Startup in a CLI** - Autonomous agents with persistent memory for revenue generation.
 
-> Un CLI moderno y rápido construido con **Go + Cobra + Viper** — binario único, multiplataforma, listo para producción.
-
----
-
-## ✨ Características
-
-- ⚡ **Startup instantáneo** (~2-5ms) — sin runtime, binario estático
-- 🌍 **Multiplataforma** — Linux, macOS, Windows (amd64/arm64)
-- ⚙️ **Configuración flexible** — flags, env vars (`AYRTON_*`), archivo YAML
-- 📦 **Distribución simple** — un solo binario, Homebrew, Scoop, Winget, APT, RPM, Docker
-- 🔄 **Releases automáticos** — GoReleaser + GitHub Actions (tags → artifacts + changelog)
-- 🧪 **CI completo** — test (race detector), lint (golangci-lint), build multi-OS
-- 📝 **Open source ready** — MIT license, contributing guide, code of conduct
-
----
-
-## 🚀 Instalación
-
-### Binario directo (recomendado)
+## 🚀 Quick Start
 
 ```bash
-# Linux/macOS
-curl -fsSL https://github.com/tuusuario/ayrton/releases/latest/download/ayrton_Linux_x86_64.tar.gz | tar xz
-sudo mv ayrton /usr/local/bin/
+# Install
+go install github.com/mauroociappinaph/ayrton@latest
 
-# macOS (Apple Silicon)
-curl -fsSL https://github.com/tuusuario/ayrton/releases/latest/download/ayrton_Darwin_arm64.tar.gz | tar xz
-sudo mv ayrton /usr/local/bin/
-
-# Windows (PowerShell)
-irm https://github.com/tuusuario/ayrton/releases/latest/download/ayrton_Windows_x86_64.zip | tar xz
-# mover ayrton.exe a tu PATH
+# Or build from source
+git clone https://github.com/mauroociappinaph/ayrton
+cd ayrton && go build -o ayrton .
 ```
 
-### Gestores de paquetes
+## 🤖 Commands
+
+| Command | Description |
+|---------|-------------|
+| `ayrton sdd propose/spec/design/tasks/apply/verify/archive` | Spec-Driven Development workflow |
+| `ayrton learn add/recall/recent` | Learning Agent with persistent memory |
+| `ayrton version` | Show version info |
+
+## 🧠 Learning Agent
+
+Persists patterns cross-session using Engram (SQLite + FTS5):
 
 ```bash
-# Homebrew (macOS/Linux)
-brew tap tuusuario/tap && brew install ayrton
+# Learn a pattern
+ayrton learn add "Use FTS5 for semantic search" --category architecture --confidence 0.95
 
-# Scoop (Windows)
-scoop bucket add tuusuario https://github.com/tuusuario/scoop-bucket
-scoop install ayrton
-
-# Winget (Windows)
-winget install tuusuario.ayrton
-
-# Docker
-docker run --rm ghcr.io/tuusuario/ayrton:latest version
+# Recall patterns
+ayrton learn recall "FTS5"
+ayrton learn recent
 ```
 
-### Desde fuente
+## 🔄 SDD Autonomous Loop
 
-```bash
-git clone https://github.com/tuusuario/ayrton
-cd ayrton
-make install
-```
+Create a GitHub issue with label `autonomous` → full SDD loop executes automatically:
+
+1. **Propose** → `.atl/proposals/{issue}.md`
+2. **Spec** → `.atl/specs/{issue}.md`
+3. **Design** → `.atl/designs/{issue}.md`
+4. **Tasks** → `.atl/tasks/{issue}.md`
+5. **Apply** → Requires AI agent (manual)
+6. **Verify** → `go test -v -race ./...`
+7. **Archive** → Sync delta specs
+
+## 🏗️ Architecture
+
+- **Core**: Go 1.23 + Cobra + Viper
+- **Memory**: Engram (SQLite + FTS5) at `~/.ayrton/engram.db`
+- **Agents**: 12 agents defined (SDD phases + Learning + Auditor + Revenue + Orchestrator)
+- **CI/CD**: GitHub Actions with SDD Autonomous Loop
+
+## 🔗 Links
+
+- **Repo**: https://github.com/mauroociappinaph/ayrton
+- **Issues**: https://github.com/mauroociappinaph/ayrton/issues
+- **Actions**: https://github.com/mauroociappinaph/ayrton/actions
 
 ---
 
-## 📖 Uso
-
-```bash
-ayrton [command] [flags]
-
-Commands:
-  greet [name]    Saluda a alguien
-  version         Muestra la versión
-  help            Ayuda sobre cualquier comando
-
-Flags:
-  -c, --config string   Archivo de configuración (default: $HOME/.ayrton.yaml)
-  -h, --help            Ayuda
-  -v, --verbose         Salida verbosa
-  -o, --output string   Formato de salida (text|json) (default "text")
-```
-
-### Ejemplos
-
-```bash
-# Saludo simple
-ayrton greet
-# ¡Hola, mundo! 👋
-
-# Saludo personalizado
-ayrton greet Mauro
-# ¡Hola, Mauro! 👋
-
-# Output JSON para scripting
-ayrton greet --output json
-# {"greeting": "¡Hola, mundo! 👋"}
-
-# Configuración via environment variable
-AYRTON_VERBOSE=true ayrton greet
-# Usando config: /home/user/.ayrton.yaml
-# ¡Hola, mundo! 👋
-```
-
-### Archivo de configuración (`~/.ayrton.yaml`)
-
-```yaml
-verbose: true
-output: "json"
-lang: "es"
-```
-
----
-
-## 🛠 Desarrollo
-
-### Requisitos
-
-- Go 1.23+
-- Make
-- golangci-lint (para linting): `go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest`
-- goreleaser (para releases): `go install github.com/goreleaser/goreleaser@latest`
-
-### Comandos útiles
-
-```bash
-make help        # Lista todos los targets
-make build       # Compila para plataforma actual
-make test        # Tests con race detector + coverage
-make lint        # Ejecuta golangci-lint
-make fmt         # Formatea con gofmt
-make check       # Pipeline completo (fmt + vet + lint + test)
-make snapshot    # Build snapshot con goreleaser (sin publicar)
-make release     # Release completo (requiere tag git)
-make dev ARGS="greet mundo"  # Build y ejecuta
-```
-
-### Estructura del proyecto
-
-```
-.
-├── main.go                 # Entry point
-├── cmd/
-│   ├── root.go             # Comando raíz, flags globales, viper
-│   ├── version.go          # Subcomando version
-│   └── greet.go            # Ejemplo de subcomando
-├── internal/               # Lógica privada (no exportable)
-├── pkg/                    # Código reusable por terceros
-├── .goreleaser.yml         # Configuración de releases
-├── Makefile                # Targets de desarrollo
-├── go.mod / go.sum
-└── .github/
-    ├── workflows/ci.yml    # CI/CD pipeline
-    └── dependabot.yml      # Updates automáticos de deps
-```
-
----
-
-## 🧪 Testing
-
-```bash
-# Tests unitarios con coverage
-make test
-
-# Ver reporte HTML
-make cover
-
-# Tests rápidos (sin race detector)
-make test-short
-```
-
----
-
-## 📦 Release
-
-Los releases son **automáticos** al pushear un tag:
-
-```bash
-# Crear y pushear tag
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-Esto dispara:
-1. ✅ CI pipeline (test, lint, build multi-OS)
-2. 🏗 GoReleaser builda para todas las plataformas
-3. 📝 Genera changelog desde commits convencionales
-4. 📤 Publica artifacts en GitHub Releases
-5. 🐳 Pushea imagen Docker a GHCR
-6. 🍺 Actualiza Homebrew tap, Scoop bucket, Winget
-
-### Versionado
-
-Usamos [SemVer](https://semver.org/) + [Conventional Commits](https://www.conventionalcommits.org/):
-
-| Tipo de commit | Version bump |
-|----------------|--------------|
-| `fix:`         | PATCH        |
-| `feat:`        | MINOR        |
-| `BREAKING CHANGE:` | MAJOR   |
-
----
-
-## 🤝 Contribuir
-
-1. Fork del repo
-2. Crea tu feature branch (`git checkout -b feat/amazing-feature`)
-3. Commit tus cambios (`git commit -m 'feat: add amazing feature'`)
-4. Push al branch (`git push origin feat/amazing-feature`)
-5. Abre un Pull Request
-
-### Guidelines
-
-- Código: `make check` debe pasar
-- Tests: añadir tests para nueva funcionalidad
-- Commits: [Conventional Commits](https://www.conventionalcommits.org/)
-- Docs: actualizar README si cambia la CLI
-
----
-
-## 📄 Licencia
-
-MIT License — ver [LICENSE](LICENSE) para detalles.
-
----
-
-## 🙏 Créditos
-
-- [Cobra](https://github.com/spf13/cobra) — CLI framework
-- [Viper](https://github.com/spf13/viper) — Configuración
-- [GoReleaser](https://goreleaser.com/) — Releases automáticos
-- [golangci-lint](https://golangci-lint.run/) — Linting
-
----
-
-<div align="center">
-  <sub>Hecho con ❤️ en Go • <a href="https://github.com/tuusuario/ayrton/issues">Reportar bug</a> • <a href="https://github.com/tuusuario/ayrton/issues">Pedir feature</a></sub>
-</div>
+*Generated automatically by Ayrton SDD Autonomous Loop*
